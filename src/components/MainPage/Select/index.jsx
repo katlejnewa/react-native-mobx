@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#F1F4F8',
   },
-
+  
 });
 const Item = ({ value, selectItem }) => (
   <TouchableOpacity style={styles.item} onPress={selectItem}>
@@ -63,11 +63,11 @@ const Item = ({ value, selectItem }) => (
 const Select = observer((props) => {
   const { source } = props;
   const store = useStore();
-
+  
   const {
     currentCountry, currentCurrency,
   } = store;
-
+  
   const data = store.getSourceArray(source);
   let currentValue;
   if (source === 'currencies') {
@@ -75,7 +75,7 @@ const Select = observer((props) => {
   } else {
     currentValue = currentCountry;
   }
-
+  
   useEffect(() => {
     (async () => {
       await store.pullData(source);
@@ -87,34 +87,33 @@ const Select = observer((props) => {
     setVisibleList(mode);
   };
   const selectItem = (value) => {
-    store.setCurrent(source, value);
+    const isManual = source === 'currencies' && value;
+    store.setCurrent(source, value, isManual);
     setVisibleList(false);
   };
   return useObserver(() => (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={showFlatList}>
       <Text style={styles.title}>
         {currentValue}
       </Text>
-      <TouchableOpacity style={styles.icon} onPress={showFlatList}>
-        <SelectIcon style={styles.icon} />
-      </TouchableOpacity>
+      <SelectIcon style={styles.icon} />
       {visibleList && (
-      <FlatList
-        style={styles.list}
-        scrollEventThrottle={16}
-        data={data}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <Item
-            value={item.value}
-            key={item.id}
-            selectItem={() => selectItem(item.value)}
-          />
-        )}
-        keyExtractor={(item) => item.id}
-      />
+        <FlatList
+          style={styles.list}
+          scrollEventThrottle={16}
+          data={data}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <Item
+              value={item.value}
+              key={item.id}
+              selectItem={() => selectItem(item.value)}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+        />
       )}
-    </View>
+    </TouchableOpacity>
   ));
 });
 
@@ -130,6 +129,7 @@ Item.propTypes = {
 };
 Item.defaultProps = {
   value: '',
-  selectItem() {},
+  selectItem() {
+  },
 };
 export default memo(Select);

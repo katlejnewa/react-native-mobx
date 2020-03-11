@@ -1,5 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 
 import { StoreProvider } from './src/mainStore';
 import MainPage from './src/containers/MainPage';
@@ -14,10 +16,12 @@ const styles = StyleSheet.create({
 });
 export default function App() {
   return (
-    <StoreProvider>
-      <View style={styles.container}>
-        <MainPage />
-      </View>
-    </StoreProvider>
+    <SafeAreaProvider>
+      <StoreProvider>
+        <View style={styles.container}>
+          <MainPage />
+        </View>
+      </StoreProvider>
+    </SafeAreaProvider>
   );
 }

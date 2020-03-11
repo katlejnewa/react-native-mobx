@@ -6,6 +6,7 @@ import Select from '../../components/MainPage/Select';
 import FormContainer from '../../../assets/svg/Union.svg';
 import ButtonsGroup from '../../components/MainPage/ButtonsGroup';
 
+
 const styles = StyleSheet.create({
   formContainer: {
     position: 'relative',
@@ -40,6 +41,7 @@ const MainPage = () => (
     </View>
     <ButtonsGroup />
   </View>
+
 );
 
 export default MainPage;

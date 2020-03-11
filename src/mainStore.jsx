@@ -53,6 +53,9 @@ class MainStore {
   @observable
   currentCurrency = null;
 
+  @observable
+  currensySetManuale = null;
+
   getCountryDefaultCurrency(countryName) {
     if (this.data.countries.length === 0) {
       return null;
@@ -68,27 +71,28 @@ class MainStore {
   getCurrent(source) {
     return this[keys[source]];
   }
-  
+
   @action
   getSourceArray(source) {
     return this.data[source] || [];
   }
-  
+
   @action
-  setCurrent(source, textValue) {
+  setCurrent(source, textValue, isMaual) {
     const thisKey = keys[source];
     this[thisKey] = textValue;
     AsyncStorage.setItem(keys[source], textValue);
-    
+
     if (source === 'currencies') {
       this.currentCurrency = textValue;
-    } else if (source === 'countries' && !this.currentCurrency) {
+      this.currensySetManuale = isMaual;
+    } else if (source === 'countries' && !this.currensySetManuale) {
       this.currentCountry = textValue;
       const currentCurrency = this.getCountryDefaultCurrency(textValue);
-      this.setCurrent('currencies', currentCurrency);
+      this.setCurrent('currencies', currentCurrency, false);
     }
   }
-  
+
   @action
   async pullData(source) {
     try {
